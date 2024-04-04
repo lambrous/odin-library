@@ -8,6 +8,35 @@
     <script defer src="./script.js"></script>
   </head>
   <body>
-    <h1>Hello</h1>
+    <h1>Odin Library</h1>
+    <ul class="library"></ul>
+    <button type="button" class="open-btn">New Book</button>
+    <dialog class="add-book-modal">
+      <form class="add-book-form" method="dialog">
+        <input
+          type="text"
+          name="title"
+          id="book-title"
+          placeholder="Title"
+          required
+        />
+        <input
+          type="text"
+          name="author"
+          id="book-author"
+          placeholder="Author"
+          required
+        />
+        <input
+          type="number"
+          name="totalPages"
+          id="total-pages"
+          placeholder="0"
+          required
+        />
+        <button type="submit">Add</button>
+        <button type="button" class="close-btn">Close</button>
+      </form>
+    </dialog>
   </body>
 </html>
