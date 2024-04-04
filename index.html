@@ -4,38 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Library | The Odin Project</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./style.css" />
     <script defer src="./script.js"></script>
   </head>
   <body>
     <h1>Odin Library</h1>
-    <ul class="library"></ul>
-    <button type="button" class="open-btn">New Book</button>
-    <dialog class="add-book-modal">
+    <ul class="library">
+      <!-- <li class="book card">
+        <button type="button" class="remove-btn">&times;</button>
+        <div>
+          <h2>Some Title</h2>
+          <p>Someone Else</p>
+          <span>420 pages</span>
+        </div>
+        <button type="button" class="btn">Read</button>
+      </li> -->
+      <button type="button" class="open-btn card">
+        <span class="btn">+</span>
+      </button>
+    </ul>
+    <dialog class="add-book-modal card">
       <form class="add-book-form" method="dialog">
-        <input
-          type="text"
-          name="title"
-          id="book-title"
-          placeholder="Title"
-          required
-        />
-        <input
-          type="text"
-          name="author"
-          id="book-author"
-          placeholder="Author"
-          required
-        />
-        <input
-          type="number"
-          name="totalPages"
-          id="total-pages"
-          placeholder="0"
-          required
-        />
-        <button type="submit">Add</button>
-        <button type="button" class="close-btn">Close</button>
+        <div class="inputs">
+          <input
+            type="text"
+            name="title"
+            id="book-title"
+            placeholder="Title"
+            required
+          />
+          <input
+            type="text"
+            name="author"
+            id="book-author"
+            placeholder="Author"
+            required
+          />
+          <input
+            type="number"
+            name="totalPages"
+            id="total-pages"
+            placeholder="Number of Pages"
+            required
+          />
+        </div>
+        <button class="btn add-btn" type="submit">Add</button>
+        <button type="button" class="close-btn remove-btn">×</button>
       </form>
     </dialog>
   </body>
