@@ -20,7 +20,7 @@ function addBookToLibrary(book) {
 	myLibrary.push(book);
 
 	const bookItem = createBookElement(book);
-	libraryElement.append(bookItem);
+	openModalButton.insertAdjacentElement("beforebegin", bookItem);
 }
 
 function deleteBook(bookID) {
@@ -33,15 +33,34 @@ function deleteBook(bookID) {
 function createBookElement(book) {
 	const bookItem = document.createElement("li");
 	bookItem.setAttribute("data-id", book.id);
-	bookItem.textContent = `${book.title} by ${book.author}, ${book.pages} pages`;
+	bookItem.classList.add("book", "card");
+
+	const bookHeading = document.createElement("h2");
+	bookHeading.textContent = book.title;
+
+	const bookAuthorText = document.createElement("p");
+	bookAuthorText.textContent = book.author;
+
+	const bookTotalPagesText = document.createElement("span");
+	bookTotalPagesText.textContent = `${book.pages} pages`;
+
+	const bookContainer = document.createElement("div");
+	bookContainer.append(bookHeading, bookAuthorText, bookTotalPagesText);
+
+	const readButton = document.createElement("button");
+	readButton.classList.add("btn");
+	readButton.classList.toggle("book-read", book.isRead);
+	readButton.textContent = book.isRead ? "Unread" : "Read";
 
 	const removeBookButton = document.createElement("button");
 	removeBookButton.textContent = "×";
+	removeBookButton.classList.add("remove-btn");
 	removeBookButton.addEventListener("click", () => {
 		deleteBook(book.id);
 		libraryElement.removeChild(bookItem);
 	});
-	bookItem.append(removeBookButton);
+
+	bookItem.append(removeBookButton, bookContainer, readButton);
 
 	return bookItem;
 }
