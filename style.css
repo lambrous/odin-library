@@ -13,7 +13,8 @@
   --font-heading: "Roboto Slab", serif;
   --font-base: "Roboto", system-ui, sans-serf;
 
-  --shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  --shadow-low: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  --shadow-md: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 *,
@@ -82,7 +83,9 @@ h1 {
   border-style: solid;
   border-width: 1px;
   border-radius: 0.5rem;
-  padding: 1rem 1.25rem;
+  --pad-block: 1rem;
+  --pad-inline: 1.25rem;
+  padding: var(--pad-block) var(--pad-inline);
 }
 
 /* --- --- --- Library --- --- --- */
@@ -108,7 +111,7 @@ h1 {
   position: relative;
 
   &:hover {
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-low);
     transform: translateY(-1%);
   }
 
@@ -143,15 +146,14 @@ h1 {
     background-color: color-mix(
       in oklab,
       var(--color-accent),
-      var(--color-background) 15%
+      var(--color-background) 25%
     );
 
-    &:focus,
     &:hover {
       background-color: color-mix(
         in oklab,
         var(--color-accent),
-        var(--color-background) 1%
+        var(--color-background) 15%
       );
     }
   }
@@ -164,7 +166,6 @@ h1 {
       var(--color-background) 95%
     );
 
-    &:focus,
     &:hover {
       color: color-mix(in oklab, var(--color-accent), var(--color-text) 70%);
       background-color: color-mix(
@@ -184,9 +185,11 @@ h1 {
 
   &:hover .remove-btn {
     scale: 1.1;
+    box-shadow: var(--shadow-low);
 
     &:hover {
       scale: 1.3;
+      box-shadow: var(--shadow-md);
     }
   }
 }
@@ -211,11 +214,12 @@ h1 {
     margin: 0;
     font-size: 1.25rem;
     font-weight: 800;
-    transition: transform 250ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: all 250ms cubic-bezier(0.215, 0.61, 0.355, 1);
   }
 
   &:hover .btn {
     transform: scale(105%);
+    box-shadow: var(--shadow-md);
   }
 }
 
@@ -223,7 +227,7 @@ h1 {
 .add-book-modal {
   width: 18rem;
   margin: auto;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-md);
 
   & form {
     height: 100%;
@@ -248,6 +252,7 @@ h1 {
     border-color: color-mix(in oklab, var(--color-text), transparent 80%);
     border-radius: 5px;
     padding: 0.5em 1em;
+    color: var(--color-text);
 
     &::placeholder {
       color: color-mix(in oklab, var(--color-text), transparent 40%);
@@ -266,25 +271,30 @@ h1 {
 
   &::backdrop {
     background: var(--color-text);
-    opacity: 0.8;
-  }
-
-  .btn {
-    font-size: 0.75rem;
-    flex: 1;
-    border: 1px solid;
-    padding-block: 0.75em;
+    opacity: 0.7;
   }
 
   .add-btn {
+    font-size: 0.75rem;
     background-color: var(--color-secondary);
     color: var(--color-secondary-dark);
+    width: 40%;
+    margin-inline: auto;
+    transition: background-color 250ms cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    &:hover {
+      background-color: color-mix(
+        in oklab,
+        var(--color-secondary),
+        var(--color-text) 5%
+      );
+    }
   }
 
   .close-btn {
     position: absolute;
-    top: 2%;
-    right: 2%;
+    top: calc(var(--pad-block) / 2);
+    right: calc(var(--pad-inline) / 2);
     z-index: 99;
   }
 }
@@ -301,5 +311,5 @@ h1 {
   display: grid;
   place-items: center;
   z-index: 10;
-  transition: scale 250ms cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: all 250ms cubic-bezier(0.075, 0.82, 0.165, 1);
 }
