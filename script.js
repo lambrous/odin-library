@@ -27,7 +27,7 @@ function addBookToLibrary(book) {
 
 function renderBook(book) {
 	const bookItem = createBookElement(book);
-	libraryElement.prepend(bookItem);
+	openModalButton.insertAdjacentElement("beforebegin", bookItem);
 }
 
 function deleteBook(bookID) {
@@ -114,3 +114,14 @@ function handleBookSubmission(event) {
 openModalButton.addEventListener("click", () => addBookModal.showModal());
 closeModalButton.addEventListener("click", () => addBookModal.close());
 addBookForm.addEventListener("submit", handleBookSubmission);
+addBookModal.addEventListener("click", (event) => {
+	const rect = addBookModal.getBoundingClientRect();
+	if (
+		event.clientY < rect.top ||
+		event.clientY > rect.bottom ||
+		event.clientX < rect.left ||
+		event.clientX > rect.right
+	) {
+		addBookModal.close();
+	}
+});
