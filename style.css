@@ -1,17 +1,16 @@
 :root {
-  --color-text: #13130e;
-  --color-background: #f7f6f4;
+  --color-text: #0d0a02;
+  --color-background: #fcf9ee;
   --color-primary: #fef3c7;
-  --color-primary-vivid: #fac905;
   --color-secondary: #adc4bc;
-  --color-secondary-dark: #364a43;
   --color-accent: #b58cb3;
+  --color-primary-vivid: #fcdf69;
   --color-accent-vivid: #9c6399;
   --color-error: #ffb4ab;
-  --color-error-darker: #690005;
 
-  --font-heading: "Roboto Slab", serif;
-  --font-base: "Roboto", system-ui, sans-serf;
+  --font-heading: "Roboto Serif", serif;
+  --font-text: "Roboto Slab", serif;
+  --font-base: "Roboto", system-ui, sans-serif;
 
   --shadow-low: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   --shadow-md: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -36,6 +35,7 @@ body {
   font-family: var(--font-base);
   background-color: var();
   line-height: 1.5;
+  background-color: var(--color-background);
 }
 
 button {
@@ -54,15 +54,16 @@ h2 {
 
 h1 {
   text-align: center;
-  font-weight: 600;
+  font-weight: 300;
   font-size: 3rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
   margin-inline: auto;
   margin-bottom: 3rem;
   width: fit-content;
   padding: 0.25em 1.2em;
   background-color: var(--color-primary);
+  border-radius: 0.5rem;
+  font-family: "Roboto Serif";
+  font-weight: 200;
 }
 
 .btn {
@@ -76,8 +77,8 @@ h1 {
   aspect-ratio: 6 / 9;
   background-color: color-mix(
     in oklab,
-    var(--color-background),
-    var(--color-primary) 3%
+    var(--color-text) 2%,
+    var(--color-background)
   );
   border-color: color-mix(in oklab, var(--color-text), transparent 90%);
   border-style: solid;
@@ -120,7 +121,7 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    font-family: var(--font-heading);
+    font-family: var(--font-text);
   }
 
   & h2 {
@@ -159,15 +160,11 @@ h1 {
   }
 
   .btn.book-read {
-    color: color-mix(in oklab, var(--color-background), var(--color-text) 55%);
-    background-color: color-mix(
-      in oklab,
-      var(--color-text),
-      var(--color-background) 95%
-    );
+    color: color-mix(in oklab, var(--color-background), var(--color-text));
+    background-color: color-mix(in oklab, var(--color-text), transparent 95%);
 
     &:hover {
-      color: color-mix(in oklab, var(--color-accent), var(--color-text) 70%);
+      color: color-mix(in oklab, var(--color-accent), var(--color-text) 60%);
       background-color: color-mix(
         in oklab,
         var(--color-accent),
@@ -202,19 +199,17 @@ h1 {
   justify-content: center;
   align-items: center;
 
-  .btn {
-    color: color-mix(
-      in oklab,
-      var(--color-text) 60%,
-      var(--color-primary-vivid)
-    );
+  & span {
     background-color: var(--color-primary-vivid);
+    color: color-mix(in oklab, var(--color-text), transparent 15%);
     border-radius: 99rem;
     width: 45%;
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 2rem;
     font-weight: 800;
     transition: all 250ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    padding-block: 0.1em;
+    letter-spacing: 0;
   }
 
   &:hover .btn {
@@ -264,20 +259,21 @@ h1 {
       background-color: color-mix(
         in oklab,
         var(--color-accent),
-        transparent 85%
+        transparent 70%
       );
+      outline-style: solid;
     }
   }
 
   &::backdrop {
-    background: var(--color-text);
-    opacity: 0.7;
+    background: var(--color-background);
+    opacity: 90%;
   }
 
   .add-btn {
     font-size: 0.75rem;
     background-color: var(--color-secondary);
-    color: var(--color-secondary-dark);
+    color: color-mix(in oklab, var(--color-secondary), var(--color-text) 70%);
     width: 40%;
     margin-inline: auto;
     transition: background-color 250ms cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -300,7 +296,7 @@ h1 {
 }
 
 .remove-btn {
-  color: var(--color-error-darker);
+  color: color-mix(in oklab, var(--color-error), var(--color-text) 70%);
   background-color: var(--color-error);
   aspect-ratio: 1 / 1;
   border-radius: 50%;
@@ -312,4 +308,17 @@ h1 {
   place-items: center;
   z-index: 10;
   transition: all 250ms cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text: #fdfaf2;
+    --color-background: #110e03;
+    --color-primary: #372c01;
+    --color-secondary: #3c534b;
+    --color-accent: #734a71;
+    --color-primary-vivid: #c8a104;
+    --color-accent-vivid: #9c6399;
+    --color-error: hsl(356, 49%, 37%);
+  }
 }
