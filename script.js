@@ -1,127 +1,143 @@
-const addBookForm = document.querySelector(".add-book-form");
-const addBookModal = document.querySelector(".add-book-modal");
-const openModalButton = document.querySelector(".open-btn");
-const closeModalButton = document.querySelector(".close-btn");
-const libraryElement = document.querySelector("ul.library");
+class Library {
+	constructor() {
+		this.books = [];
+		this.nextBookID = 1;
+	}
 
-const myLibrary = [];
+	add(book) {
+		book.id = this.nextBookID++;
+		this.books.push(book);
+	}
 
-let nextBookID = 1;
-
-function Book(title, author, pages) {
-	this.title = title;
-	this.author = author;
-	this.pages = pages;
-	this.isRead = false;
-	this.id = nextBookID++;
-}
-
-Book.prototype.toggleRead = function () {
-	this.isRead = !this.isRead;
-};
-
-function addBookToLibrary(book) {
-	myLibrary.push(book);
-	renderBook(book);
-}
-
-function renderBook(book) {
-	const bookItem = createBookElement(book);
-	openModalButton.insertAdjacentElement("beforebegin", bookItem);
-}
-
-function deleteBook(bookID) {
-	const index = myLibrary.findIndex((book) => book.id === bookID);
-	if (index !== -1) {
-		myLibrary.splice(index, 1);
+	remove(bookID) {
+		const index = this.books.findIndex((book) => bookID === book.id);
+		if (index < 0) return;
+		this.books.splice(index, 1);
 	}
 }
 
-function createBookElement(book) {
-	const bookItem = document.createElement("li");
-	bookItem.setAttribute("data-id", book.id);
-	bookItem.classList.add("book", "card");
-
-	const bookDescription = createBookDescription(book);
-	const readButton = createReadButton(book);
-	const removeBookButton = createRemoveButton(bookItem);
-
-	bookItem.append(removeBookButton, bookDescription, readButton);
-
-	return bookItem;
-}
-
-function createBookDescription(book) {
-	const bookHeading = document.createElement("h2");
-	bookHeading.textContent = book.title;
-
-	const bookAuthorText = document.createElement("p");
-	bookAuthorText.textContent = book.author;
-
-	const bookTotalPagesText = document.createElement("span");
-	bookTotalPagesText.textContent = `${book.pages} pages`;
-
-	const bookContainer = document.createElement("div");
-	bookContainer.append(bookHeading, bookAuthorText, bookTotalPagesText);
-
-	return bookContainer;
-}
-
-function createReadButton(book) {
-	const readButton = document.createElement("button");
-	readButton.classList.add("btn");
-
-	function updateReadStatus() {
-		readButton.classList.toggle("book-read", book.isRead);
-		readButton.textContent = book.isRead ? "Unread" : "Read";
+class Book {
+	constructor(title, author, pages) {
+		this.title = title;
+		this.author = author;
+		this.pages = pages;
+		this.isRead = false;
 	}
 
-	updateReadStatus();
+	toggleRead() {
+		this.isRead = !this.isRead;
+	}
+}
 
-	readButton.addEventListener("click", () => {
-		book.toggleRead();
+(() => {
+	const myLibrary = new Library();
+
+	const addBookForm = document.querySelector(".add-book-form");
+	const addBookModal = document.querySelector(".add-book-modal");
+	const openModalButton = document.querySelector(".open-btn");
+	const closeModalButton = document.querySelector(".close-btn");
+	const libraryElement = document.querySelector("ul.library");
+
+	const updateLibraryDisplay = () => {
+		libraryElement.replaceChildren(openModalButton);
+		myLibrary.books.forEach(renderBook);
+	};
+
+	const renderBook = (book) => {
+		const bookItem = createBookElement(book);
+		openModalButton.insertAdjacentElement("beforebegin", bookItem);
+	};
+
+	const createBookElement = (book) => {
+		const bookItem = document.createElement("li");
+		bookItem.setAttribute("data-id", book.id);
+		bookItem.classList.add("book", "card");
+
+		const bookDescription = createBookDescription(book);
+		const readButton = createReadButton(book);
+		const removeBookButton = createRemoveButton(bookItem);
+
+		bookItem.append(removeBookButton, bookDescription, readButton);
+
+		return bookItem;
+	};
+
+	const createBookDescription = (book) => {
+		const bookHeading = document.createElement("h2");
+		bookHeading.textContent = book.title;
+
+		const bookAuthorText = document.createElement("p");
+		bookAuthorText.textContent = book.author;
+
+		const bookTotalPagesText = document.createElement("span");
+		bookTotalPagesText.textContent = `${book.pages} pages`;
+
+		const bookContainer = document.createElement("div");
+		bookContainer.append(bookHeading, bookAuthorText, bookTotalPagesText);
+
+		return bookContainer;
+	};
+
+	const createReadButton = (book) => {
+		const readButton = document.createElement("button");
+		readButton.classList.add("btn");
+
+		const updateReadStatus = () => {
+			readButton.classList.toggle("book-read", book.isRead);
+			readButton.textContent = book.isRead ? "Unread" : "Read";
+		};
+
 		updateReadStatus();
-	});
 
-	return readButton;
-}
+		readButton.addEventListener("click", () => {
+			book.toggleRead();
+			updateReadStatus();
+		});
 
-function createRemoveButton(bookItem) {
-	const bookID = bookItem.dataset.id;
-	const removeButton = document.createElement("button");
-	removeButton.textContent = "×";
-	removeButton.classList.add("remove-btn");
-	removeButton.addEventListener("click", () => {
-		deleteBook(+bookID);
-		libraryElement.removeChild(bookItem);
-	});
+		return readButton;
+	};
 
-	return removeButton;
-}
+	const createRemoveButton = (bookItem) => {
+		const bookID = bookItem.dataset.id;
+		const removeButton = document.createElement("button");
+		removeButton.textContent = "×";
+		removeButton.classList.add("remove-btn");
+		removeButton.addEventListener("click", () => {
+			myLibrary.remove(+bookID);
+			libraryElement.removeChild(bookItem);
+		});
 
-function handleBookSubmission(event) {
-	event.preventDefault();
+		return removeButton;
+	};
 
-	const newBookData = new FormData(this);
-	const { title, author, totalPages } = Object.fromEntries(newBookData);
-	const newBook = new Book(title, author, +totalPages);
+	const handleBookSubmission = (e) => {
+		e.preventDefault();
 
-	addBookToLibrary(newBook);
-	addBookModal.close();
-	event.target.reset();
-}
+		const newBookData = new FormData(e.target);
+		const { title, author, totalPages } = Object.fromEntries(newBookData);
+		const newBook = new Book(title, author, +totalPages);
 
-openModalButton.addEventListener("click", () => addBookModal.showModal());
-closeModalButton.addEventListener("click", () => addBookModal.close());
-addBookForm.addEventListener("submit", handleBookSubmission);
-addBookModal.addEventListener("click", (event) => {
-	const rect = addBookModal.getBoundingClientRect();
-	if (
-		event.clientY < rect.top ||
-		event.clientY > rect.bottom ||
-		event.clientX < rect.left ||
-		event.clientX > rect.right
-	) {
+		myLibrary.add(newBook);
+		renderBook(newBook);
 		addBookModal.close();
-	}
-});
+		e.target.reset();
+	};
+
+	const handleBackdropClick = (e) => {
+		const modal = e.target;
+		const rect = modal.getBoundingClientRect();
+		if (
+			event.clientY < rect.top ||
+			event.clientY > rect.bottom ||
+			event.clientX < rect.left ||
+			event.clientX > rect.right
+		) {
+			modal.close();
+		}
+	};
+
+	openModalButton.addEventListener("click", () => addBookModal.showModal());
+	closeModalButton.addEventListener("click", () => addBookModal.close());
+	addBookForm.addEventListener("submit", handleBookSubmission);
+	addBookModal.addEventListener("click", handleBackdropClick);
+})();
