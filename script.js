@@ -1,11 +1,9 @@
 class Library {
 	constructor() {
 		this.books = [];
-		this.nextBookID = 1;
 	}
 
 	add(book) {
-		book.id = this.nextBookID++;
 		this.books.push(book);
 	}
 
@@ -17,11 +15,14 @@ class Library {
 }
 
 class Book {
+	static nextBookID = 1;
+
 	constructor(title, author, pages) {
 		this.title = title;
 		this.author = author;
 		this.pages = pages;
 		this.isRead = false;
+		this.id = Book.nextBookID++;
 	}
 
 	toggleRead() {
@@ -37,11 +38,6 @@ class Book {
 	const openModalButton = document.querySelector(".open-btn");
 	const closeModalButton = document.querySelector(".close-btn");
 	const libraryElement = document.querySelector("ul.library");
-
-	const updateLibraryDisplay = () => {
-		libraryElement.replaceChildren(openModalButton);
-		myLibrary.books.forEach(renderBook);
-	};
 
 	const renderBook = (book) => {
 		const bookItem = createBookElement(book);
@@ -123,14 +119,14 @@ class Book {
 		e.target.reset();
 	};
 
-	const handleBackdropClick = (e) => {
+	const handleClickOutsideModal = (e) => {
 		const modal = e.target;
 		const rect = modal.getBoundingClientRect();
 		if (
-			event.clientY < rect.top ||
-			event.clientY > rect.bottom ||
-			event.clientX < rect.left ||
-			event.clientX > rect.right
+			e.clientY < rect.top ||
+			e.clientY > rect.bottom ||
+			e.clientX < rect.left ||
+			e.clientX > rect.right
 		) {
 			modal.close();
 		}
@@ -139,5 +135,5 @@ class Book {
 	openModalButton.addEventListener("click", () => addBookModal.showModal());
 	closeModalButton.addEventListener("click", () => addBookModal.close());
 	addBookForm.addEventListener("submit", handleBookSubmission);
-	addBookModal.addEventListener("click", handleBackdropClick);
+	addBookModal.addEventListener("click", handleClickOutsideModal);
 })();
