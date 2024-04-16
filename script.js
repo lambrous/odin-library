@@ -39,6 +39,11 @@ class Book {
 	const closeModalButton = document.querySelector(".close-btn");
 	const libraryElement = document.querySelector("ul.library");
 
+	const updateLibraryDisplay = () => {
+		libraryElement.replaceChildren(openModalButton);
+		myLibrary.books.forEach(renderBook);
+	};
+
 	const renderBook = (book) => {
 		const bookItem = createBookElement(book);
 		openModalButton.insertAdjacentElement("beforebegin", bookItem);
@@ -136,4 +141,12 @@ class Book {
 	closeModalButton.addEventListener("click", () => addBookModal.close());
 	addBookForm.addEventListener("submit", handleBookSubmission);
 	addBookModal.addEventListener("click", handleClickOutsideModal);
+
+	// dummy books
+	const book1 = new Book("The Cartographer's Code", "Amara Singh", 384);
+	const book2 = new Book("Echoes of Hyperion", "Kai Tanaka", 520);
+	const book3 = new Book("Exodus from the Dying Sun", "Li Wang", 712);
+	for (const book of [book1, book2, book3]) myLibrary.add(book);
+	book2.toggleRead();
+	updateLibraryDisplay();
 })();
